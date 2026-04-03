@@ -6,6 +6,19 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        brand: {
+          DEFAULT: '#ff6666',
+          light: '#ff8888',
+          dark: '#cc4444',
+        },
+        surface: {
+          DEFAULT: '#333333',
+          light: '#444444',
+          dark: '#222222',
+        },
+        bg: '#000000',
+      },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],

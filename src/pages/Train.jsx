@@ -5,16 +5,16 @@ import { TRAINING_WEEKS, PHASES, getWeekNumber, getSessionDate, getPhaseForWeek,
 import { formatDate, isToday } from '../utils/formatters'
 import { SessionTypeBadge, PhaseBadge, StatusBadge } from '../components/ui/Badge'
 
-const INNER = { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 12 }
-const INNER_MID = { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.13)', borderRadius: 12 }
+const INNER = { background: 'rgba(51,51,51,0.45)', border: '1px solid rgba(255,102,102,0.12)', borderRadius: 12 }
+const INNER_MID = { background: 'rgba(51,51,51,0.65)', border: '1px solid rgba(255,102,102,0.22)', borderRadius: 12 }
 
 function ExerciseList({ exercises }) {
   return (
     <div className="space-y-2 mt-3">
       {exercises.map((ex, i) => (
         <div key={i} className="flex gap-3 p-3 rounded-xl" style={INNER}>
-          <div className="w-6 h-6 rounded-full text-white/42 text-xs flex items-center justify-center font-bold shrink-0 mt-0.5"
-            style={{ background: 'rgba(255,255,255,0.06)' }}>
+          <div className="w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold shrink-0 mt-0.5"
+            style={{ background: 'rgba(255,102,102,0.15)', color: '#ff6666' }}>
             {i + 1}
           </div>
           <div className="flex-1 min-w-0">
@@ -24,7 +24,7 @@ function ExerciseList({ exercises }) {
               {ex.reps && <span className="text-xs text-white/38">{ex.reps} reps</span>}
               {ex.distance && <span className="text-xs text-white/38">{ex.distance}{ex.unit}</span>}
               {ex.weight && <span className="text-xs text-white/52">{ex.weight}</span>}
-              {ex.rest && <span className="text-xs text-white/25">Rest: {ex.rest}</span>}
+              {ex.rest && <span className="text-xs" style={{ color: 'rgba(255,102,102,0.45)' }}>Rest: {ex.rest}</span>}
             </div>
             {ex.notes && <p className="text-xs text-white/25 mt-1 italic">{ex.notes}</p>}
           </div>
@@ -46,13 +46,13 @@ function HyroxSimDetails({ stations }) {
       </div>
       {details.map((s, i) => (
         <div key={s.id} className="flex items-center gap-3 p-3 rounded-xl" style={INNER}>
-          <div className="w-7 h-7 rounded-full text-white/42 text-xs flex items-center justify-center font-bold"
-            style={{ background: 'rgba(255,255,255,0.05)' }}>{i + 1}</div>
+          <div className="w-7 h-7 rounded-full text-xs flex items-center justify-center font-bold"
+            style={{ background: 'rgba(255,102,102,0.15)', color: '#ff6666' }}>{i + 1}</div>
           <div className="flex-1">
             <p className="text-sm font-semibold text-white/80">{s.name}</p>
             <p className="text-xs text-white/30">{s.distance ? `${s.distance}${s.unit}` : `${s.reps} ${s.unit}`}</p>
           </div>
-          {i < details.length - 1 && <p className="text-xs text-white/25">→ 1km run</p>}
+          {i < details.length - 1 && <p className="text-xs" style={{ color: 'rgba(255,102,102,0.45)' }}>→ 1km run</p>}
         </div>
       ))}
     </div>
@@ -67,19 +67,20 @@ function SessionCard({ session, day, date, sessionId }) {
 
   return (
     <div className="overflow-hidden rounded-2xl" style={{
-      background: today ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0.05)',
-      border: today ? '1px solid rgba(255,255,255,0.24)' : '1px solid rgba(255,255,255,0.09)',
+      background: today ? 'rgba(255,102,102,0.12)' : 'rgba(51,51,51,0.50)',
+      border: today ? '1px solid rgba(255,102,102,0.45)' : '1px solid rgba(255,102,102,0.14)',
       backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
     }}>
       <button className="w-full p-4 text-left" onClick={() => setExpanded(e => !e)}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className={`text-xs font-bold uppercase tracking-wider ${today ? 'text-white/68' : 'text-white/28'}`}>
+              <span className={`text-xs font-bold uppercase tracking-wider ${today ? 'text-white/80' : 'text-white/28'}`}>
                 {day.charAt(0).toUpperCase() + day.slice(1)}
               </span>
               <span className="text-white/15">·</span>
-              <span className={`text-xs ${today ? 'text-white/60 font-bold' : 'text-white/25'}`}>
+              <span className={`text-xs ${today ? 'font-bold' : 'text-white/25'}`}
+                style={today ? { color: '#ff6666' } : {}}>
                 {today ? 'Today' : formatDate(date)}
               </span>
               <SessionTypeBadge type={session.type} />
@@ -113,7 +114,7 @@ function SessionCard({ session, day, date, sessionId }) {
               </div>
               {session.intervals && (
                 <div className="p-3 rounded-xl mb-3" style={INNER_MID}>
-                  <p className="text-xs font-bold text-white/48 mb-2">Interval Details</p>
+                  <p className="text-xs font-bold mb-2" style={{ color: 'rgba(255,102,102,0.65)' }}>Interval Details</p>
                   {session.intervals.map((iv, i) => (
                     <p key={i} className="text-sm text-white/70">
                       {iv.reps} × {iv.distance < 1 ? `${iv.distance * 1000}m` : `${iv.distance}km`} @ {iv.pace}
@@ -129,7 +130,7 @@ function SessionCard({ session, day, date, sessionId }) {
           {session.type === 'race' && (
             <div className="p-4 rounded-xl" style={INNER_MID}>
               <div className="flex items-center gap-2 mb-2">
-                <Flag size={15} strokeWidth={1.6} className="text-white/62" />
+                <Flag size={15} strokeWidth={1.6} style={{ color: '#ff6666' }} />
                 <p className="text-base font-black text-white">Race Day</p>
               </div>
               <p className="text-sm text-white/45">{session.notes}</p>
@@ -137,7 +138,7 @@ function SessionCard({ session, day, date, sessionId }) {
           )}
           {session.notes && session.type !== 'race' && (
             <div className="mt-3 p-3 rounded-xl" style={INNER}>
-              <p className="text-xs font-semibold text-white/22 mb-1">Coach Notes</p>
+              <p className="text-xs font-semibold mb-1" style={{ color: 'rgba(255,102,102,0.45)' }}>Coach Notes</p>
               <p className="text-sm text-white/40 italic">"{session.notes}"</p>
             </div>
           )}
@@ -146,9 +147,9 @@ function SessionCard({ session, day, date, sessionId }) {
               onClick={() => markSession(sessionId, status === 'complete' ? null : 'complete')}
               className="flex-1 flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold min-h-[44px]"
               style={{
-                background: status === 'complete' ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.07)',
-                border: `1px solid ${status === 'complete' ? 'rgba(255,255,255,0.30)' : 'rgba(255,255,255,0.11)'}`,
-                color: status === 'complete' ? '#fff' : 'rgba(255,255,255,0.48)',
+                background: status === 'complete' ? 'rgba(255,102,102,0.25)' : 'rgba(51,51,51,0.55)',
+                border: `1px solid ${status === 'complete' ? 'rgba(255,102,102,0.60)' : 'rgba(255,102,102,0.18)'}`,
+                color: status === 'complete' ? '#ff6666' : 'rgba(255,255,255,0.48)',
               }}
             >
               <Check size={14} />{status === 'complete' ? 'Done' : 'Complete'}
@@ -158,9 +159,9 @@ function SessionCard({ session, day, date, sessionId }) {
                 onClick={() => markSession(sessionId, status === s ? null : s)}
                 className="flex items-center justify-center rounded-xl px-4 py-3 min-h-[44px]"
                 style={{
-                  background: status === s ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0.04)',
-                  border: `1px solid ${status === s ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.07)'}`,
-                  color: 'rgba(255,255,255,0.35)',
+                  background: status === s ? 'rgba(255,102,102,0.15)' : 'rgba(51,51,51,0.40)',
+                  border: `1px solid ${status === s ? 'rgba(255,102,102,0.40)' : 'rgba(255,102,102,0.10)'}`,
+                  color: status === s ? '#ff6666' : 'rgba(255,255,255,0.35)',
                 }}
               >
                 <Icon size={14} />
@@ -194,15 +195,16 @@ export default function Train() {
   const tabS = (a) => ({
     flex: 1, padding: '0.5rem', borderRadius: '0.75rem', fontSize: '0.875rem', fontWeight: 600,
     minHeight: 44, cursor: 'pointer', transition: 'all 0.15s',
-    background: a ? '#fff' : 'rgba(255,255,255,0.06)', color: a ? '#000' : 'rgba(255,255,255,0.38)',
-    border: a ? 'none' : '1px solid rgba(255,255,255,0.09)',
+    background: a ? '#ff6666' : 'rgba(51,51,51,0.55)',
+    color: a ? '#000' : 'rgba(255,255,255,0.45)',
+    border: a ? 'none' : '1px solid rgba(255,102,102,0.15)',
   })
   const pillS = (a) => ({
     flex: 1, padding: '0.35rem 0.25rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600,
     cursor: 'pointer', transition: 'all 0.15s',
-    background: a ? 'rgba(255,255,255,0.09)' : 'transparent',
-    color: a ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.26)',
-    border: a ? '1px solid rgba(255,255,255,0.18)' : '1px solid transparent',
+    background: a ? 'rgba(255,102,102,0.18)' : 'transparent',
+    color: a ? '#ff6666' : 'rgba(255,255,255,0.30)',
+    border: a ? '1px solid rgba(255,102,102,0.35)' : '1px solid transparent',
   })
 
   return (
@@ -227,8 +229,8 @@ export default function Train() {
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <button onClick={() => setSelectedWeek(w => Math.max(1, w - 1))} disabled={selectedWeek === 1}
-              className="w-11 h-11 rounded-xl flex items-center justify-center text-white/38 disabled:opacity-20"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.09)' }}>
+              className="w-11 h-11 rounded-xl flex items-center justify-center disabled:opacity-20"
+              style={{ background: 'rgba(51,51,51,0.55)', border: '1px solid rgba(255,102,102,0.18)', color: '#ff6666' }}>
               <ChevronLeft size={19} />
             </button>
             <div className="flex-1 text-center">
@@ -236,8 +238,8 @@ export default function Train() {
                 <p className="text-lg font-black text-white">Week {selectedWeek}</p>
                 <PhaseBadge phase={week.phase} />
                 {selectedWeek === currentWeekNum && inPlan && (
-                  <span className="text-xs font-bold text-white/68 px-2 py-0.5 rounded-full"
-                    style={{ background: 'rgba(255,255,255,0.09)', border: '1px solid rgba(255,255,255,0.18)' }}>
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                    style={{ background: 'rgba(255,102,102,0.18)', border: '1px solid rgba(255,102,102,0.40)', color: '#ff6666' }}>
                     Now
                   </span>
                 )}
@@ -245,8 +247,8 @@ export default function Train() {
               <p className="text-xs text-white/26 mt-0.5">{week.focus}</p>
             </div>
             <button onClick={() => setSelectedWeek(w => Math.min(16, w + 1))} disabled={selectedWeek === 16}
-              className="w-11 h-11 rounded-xl flex items-center justify-center text-white/38 disabled:opacity-20"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.09)' }}>
+              className="w-11 h-11 rounded-xl flex items-center justify-center disabled:opacity-20"
+              style={{ background: 'rgba(51,51,51,0.55)', border: '1px solid rgba(255,102,102,0.18)', color: '#ff6666' }}>
               <ChevronRight size={19} />
             </button>
           </div>
@@ -268,13 +270,13 @@ export default function Train() {
           {PHASES.map(phase => (
             <div key={phase.id}>
               <div className="flex items-center gap-3 py-2">
-                <div className="h-px flex-1" style={{ background: 'rgba(255,255,255,0.07)' }} />
+                <div className="h-px flex-1" style={{ background: 'rgba(255,102,102,0.15)' }} />
                 <div className="flex items-center gap-2 px-3 py-1 rounded-full"
-                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.11)' }}>
-                  <span className="text-xs font-black text-white/75">{phase.name}</span>
+                  style={{ background: 'rgba(51,51,51,0.55)', border: '1px solid rgba(255,102,102,0.22)' }}>
+                  <span className="text-xs font-black" style={{ color: '#ff6666' }}>{phase.name}</span>
                   <span className="text-xs text-white/35">{phase.label}</span>
                 </div>
-                <div className="h-px flex-1" style={{ background: 'rgba(255,255,255,0.07)' }} />
+                <div className="h-px flex-1" style={{ background: 'rgba(255,102,102,0.15)' }} />
               </div>
               <div className="space-y-2">
                 {phase.weeks.map(wNum => {
@@ -284,17 +286,18 @@ export default function Train() {
                   const isCurrent = wNum === currentWeekNum && inPlan
                   return (
                     <div key={wNum} className="overflow-hidden rounded-2xl" style={{
-                      background: isCurrent ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)',
-                      border: isCurrent ? '1px solid rgba(255,255,255,0.20)' : '1px solid rgba(255,255,255,0.07)',
+                      background: isCurrent ? 'rgba(255,102,102,0.10)' : 'rgba(51,51,51,0.40)',
+                      border: isCurrent ? '1px solid rgba(255,102,102,0.40)' : '1px solid rgba(255,102,102,0.10)',
                     }}>
                       <button className="w-full p-3 text-left" onClick={() => { setSelectedWeek(wNum); setView('week') }}>
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className={`text-sm font-bold ${isCurrent ? 'text-white' : 'text-white/68'}`}>Week {wNum}</span>
+                              <span className={`text-sm font-bold ${isCurrent ? '' : 'text-white/68'}`}
+                                style={isCurrent ? { color: '#ff6666' } : {}}>Week {wNum}</span>
                               {isCurrent && (
-                                <span className="text-xs font-bold text-white/65 px-1.5 py-0.5 rounded-full"
-                                  style={{ background: 'rgba(255,255,255,0.09)', border: '1px solid rgba(255,255,255,0.17)' }}>
+                                <span className="text-xs font-bold px-1.5 py-0.5 rounded-full"
+                                  style={{ background: 'rgba(255,102,102,0.18)', border: '1px solid rgba(255,102,102,0.38)', color: '#ff6666' }}>
                                   NOW
                                 </span>
                               )}
@@ -304,7 +307,7 @@ export default function Train() {
                           <div className="flex gap-1.5">
                             {sessions.map(({ session }, i) => (
                               <div key={i} className="w-2 h-2 rounded-full"
-                                style={{ background: session.type === 'hyrox_sim' ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.22)' }} />
+                                style={{ background: session.type === 'hyrox_sim' ? '#ff6666' : 'rgba(255,102,102,0.30)' }} />
                             ))}
                           </div>
                         </div>

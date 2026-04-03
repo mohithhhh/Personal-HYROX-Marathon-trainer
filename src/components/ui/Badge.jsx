@@ -1,11 +1,12 @@
 export default function Badge({ children, bright = false, className = '' }) {
   return (
     <span
-      className={`inline-flex items-center text-xs font-bold px-2 py-0.5 rounded-full border ${
+      className={`inline-flex items-center text-xs font-bold px-2 py-0.5 rounded-full border ${className}`}
+      style={
         bright
-          ? 'bg-white/15 border-white/30 text-white'
-          : 'bg-white/6 border-white/10 text-white/45'
-      } ${className}`}
+          ? { background: 'rgba(255,102,102,0.20)', borderColor: 'rgba(255,102,102,0.50)', color: '#ff6666' }
+          : { background: 'rgba(51,51,51,0.60)', borderColor: 'rgba(255,102,102,0.18)', color: 'rgba(255,255,255,0.45)' }
+      }
     >
       {children}
     </span>

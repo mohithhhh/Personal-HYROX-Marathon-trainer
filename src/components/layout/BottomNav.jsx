@@ -14,10 +14,10 @@ export default function BottomNav() {
     <nav
       className="fixed bottom-0 left-0 right-0 z-50 bottom-nav-safe"
       style={{
-        background: 'rgba(8,8,8,0.88)',
+        background: 'rgba(0,0,0,0.90)',
         backdropFilter: 'blur(24px) saturate(180%)',
         WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-        borderTop: '1px solid rgba(255,255,255,0.07)',
+        borderTop: '1px solid rgba(255,102,102,0.18)',
       }}
     >
       <div className="flex items-stretch justify-around max-w-lg mx-auto">
@@ -34,12 +34,12 @@ export default function BottomNav() {
                   <Icon
                     size={21}
                     strokeWidth={isActive ? 2.2 : 1.6}
-                    color={isActive ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.28)'}
+                    color={isActive ? '#ff6666' : 'rgba(255,255,255,0.28)'}
                   />
                 </div>
                 <span
                   className="text-[10px] font-semibold"
-                  style={{ color: isActive ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.28)' }}
+                  style={{ color: isActive ? '#ff6666' : 'rgba(255,255,255,0.28)' }}
                 >
                   {label}
                 </span>
