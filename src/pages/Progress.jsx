@@ -7,6 +7,7 @@ import {
 import { useAppData } from '../hooks/useAppData'
 import { formatDate, formatKg, formatTime } from '../utils/formatters'
 import ProgressBar from '../components/ui/ProgressBar'
+import TrainingInsights from '../components/TrainingInsights'
 
 const CHART_TOOLTIP_STYLE = {
   contentStyle: { backgroundColor: 'rgba(8,8,8,0.92)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8 },
@@ -319,7 +320,7 @@ const tabS = (a) => ({
 })
 
 export default function Progress() {
-  const { workoutLogs, hyroxSims, bodyMetrics, sessionStatus, personalRecords, addBodyMetric, isWeightLossTooFast } = useAppData()
+  const { workoutLogs, hyroxSims, bodyMetrics, nutritionLogs, sessionStatus, personalRecords, addBodyMetric, isWeightLossTooFast } = useAppData()
   const [tab, setTab] = useState('overview')
   const warning = isWeightLossTooFast()
 
@@ -343,6 +344,7 @@ export default function Progress() {
 
       {tab === 'overview' && (
         <div className="space-y-4">
+          <TrainingInsights workoutLogs={workoutLogs} nutritionLogs={nutritionLogs} hyroxSims={hyroxSims} bodyMetrics={bodyMetrics} />
           <TrainingStats workoutLogs={workoutLogs} sessionStatus={sessionStatus} />
           <PersonalRecords prs={personalRecords} hyroxSims={hyroxSims} workoutLogs={workoutLogs} />
           <ExportButton workoutLogs={workoutLogs} />

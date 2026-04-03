@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Dumbbell, PlusCircle, Target, TrendingUp } from 'lucide-react'
+import { LayoutDashboard, Dumbbell, PlusCircle, TrendingUp, Brain } from 'lucide-react'
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+  { to: '/', label: 'Home', icon: LayoutDashboard, exact: true },
   { to: '/train', label: 'Train', icon: Dumbbell },
   { to: '/log', label: 'Log', icon: PlusCircle },
-  { to: '/hyrox', label: 'Hyrox', icon: Target },
+  { to: '/coach', label: 'Coach', icon: Brain },
   { to: '/progress', label: 'Progress', icon: TrendingUp },
 ]
 

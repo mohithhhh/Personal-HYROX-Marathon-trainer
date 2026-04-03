@@ -4,6 +4,7 @@ import { useAppData } from '../hooks/useAppData'
 import { TRAINING_WEEKS, PHASES, getWeekNumber, getSessionDate, getPhaseForWeek, HYROX_STATIONS } from '../data/trainingPlan'
 import { formatDate, isToday } from '../utils/formatters'
 import { SessionTypeBadge, PhaseBadge, StatusBadge } from '../components/ui/Badge'
+import CoachSays from '../components/CoachSays'
 
 const INNER = { background: 'rgba(51,51,51,0.45)', border: '1px solid rgba(255,102,102,0.12)', borderRadius: 12 }
 const INNER_MID = { background: 'rgba(51,51,51,0.65)', border: '1px solid rgba(255,102,102,0.22)', borderRadius: 12 }
@@ -142,6 +143,7 @@ function SessionCard({ session, day, date, sessionId }) {
               <p className="text-sm text-white/40 italic">"{session.notes}"</p>
             </div>
           )}
+          {session.type !== 'race' && <CoachSays session={session} day={day} />}
           <div className="flex gap-2 mt-4">
             <button
               onClick={() => markSession(sessionId, status === 'complete' ? null : 'complete')}

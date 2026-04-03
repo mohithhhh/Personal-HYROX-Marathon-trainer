@@ -107,7 +107,9 @@ function SimForm({ onSave, onCancel }) {
                     {station.distance ? `${station.distance}${station.unit}` : `${station.reps} ${station.unit}`}
                   </p>
                 </div>
-          <span className="text-sm font-black" style={{ color: '#ff6666' }}>{formatTime(Number(stations[station.id].time))}</span>
+          {stations[station.id]?.time && (
+                  <span className="text-sm font-black" style={{ color: '#ff6666' }}>{formatTime(Number(stations[station.id].time))}</span>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>

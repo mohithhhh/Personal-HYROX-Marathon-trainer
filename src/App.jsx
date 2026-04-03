@@ -6,6 +6,7 @@ import Log from './pages/Log'
 import Hyrox from './pages/Hyrox'
 import Nutrition from './pages/Nutrition'
 import Progress from './pages/Progress'
+import CoachHub from './pages/CoachHub'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/hyrox" element={<Hyrox />} />
           <Route path="/nutrition" element={<Nutrition />} />
           <Route path="/progress" element={<Progress />} />
+          <Route path="/coach" element={<CoachHub />} />
         </Routes>
       </Layout>
     </BrowserRouter>
