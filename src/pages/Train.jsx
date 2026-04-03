@@ -176,11 +176,11 @@ function SessionCard({ session, day, date, sessionId }) {
 
 export default function Train() {
   const [view, setView] = useState('week')
-  const [selectedWeek, setSelectedWeek] = useState(() => Math.max(1, Math.min(16, getWeekNumber(new Date()) || 1)))
+  const [selectedWeek, setSelectedWeek] = useState(() => Math.max(1, Math.min(24, getWeekNumber(new Date()) || 1)))
   const [splitView, setSplitView] = useState('all')
 
   const currentWeekNum = getWeekNumber(new Date())
-  const inPlan = currentWeekNum >= 1 && currentWeekNum <= 16
+  const inPlan = currentWeekNum >= 1 && currentWeekNum <= 24
   const week = TRAINING_WEEKS[selectedWeek - 1]
 
   const getSessions = (w, wNum) =>
@@ -246,7 +246,7 @@ export default function Train() {
               </div>
               <p className="text-xs text-white/26 mt-0.5">{week.focus}</p>
             </div>
-            <button onClick={() => setSelectedWeek(w => Math.min(16, w + 1))} disabled={selectedWeek === 16}
+            <button onClick={() => setSelectedWeek(w => Math.min(24, w + 1))} disabled={selectedWeek === 24}
               className="w-11 h-11 rounded-xl flex items-center justify-center disabled:opacity-20"
               style={{ background: 'rgba(51,51,51,0.55)', border: '1px solid rgba(255,102,102,0.18)', color: '#ff6666' }}>
               <ChevronRight size={19} />
