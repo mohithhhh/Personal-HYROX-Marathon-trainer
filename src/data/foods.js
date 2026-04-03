@@ -3,12 +3,12 @@
 // For 75kg person: 120–150g protein/day
 
 export const FOOD_CATEGORIES = [
-  { id: 'eggs_dairy', name: 'Eggs & Dairy', icon: '🥚' },
-  { id: 'meat_fish', name: 'Meat & Fish', icon: '🍗' },
-  { id: 'legumes', name: 'Dal & Legumes', icon: '🫘' },
-  { id: 'grains', name: 'Rice & Rotis', icon: '🍚' },
-  { id: 'supplements', name: 'Supplements', icon: '💊' },
-  { id: 'snacks', name: 'Snacks & Others', icon: '🥜' },
+  { id: 'eggs_dairy', name: 'Eggs & Dairy' },
+  { id: 'meat_fish', name: 'Meat & Fish' },
+  { id: 'legumes', name: 'Dal & Legumes' },
+  { id: 'grains', name: 'Rice & Rotis' },
+  { id: 'supplements', name: 'Supplements' },
+  { id: 'snacks', name: 'Snacks & Others' },
 ]
 
 // protein in grams, calories in kcal (per serving)

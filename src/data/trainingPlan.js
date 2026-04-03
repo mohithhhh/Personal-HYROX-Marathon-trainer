@@ -11,21 +11,21 @@ export const HYROX_RACE_DATE = '2026-09-20'
 export const HALF_MARATHON_DATE = '2026-09-27'
 
 export const PHASES = [
-  { id: 1, name: 'Phase 1', label: 'Foundation', weeks: [1, 2, 3, 4], color: '#6366f1', description: 'Learn the movements, build base aerobic fitness, easy adaptation' },
-  { id: 2, name: 'Phase 2', label: 'Build', weeks: [5, 6, 7, 8], color: '#f97316', description: 'Increase volume, introduce race-pace running, full station circuits' },
-  { id: 3, name: 'Phase 3', label: 'Peak', weeks: [9, 10, 11, 12, 13], color: '#ef4444', description: 'Race-intensity training, peak long runs, full Hyrox simulations' },
-  { id: 4, name: 'Phase 4', label: 'Taper', weeks: [14, 15, 16], color: '#22c55e', description: 'Reduce volume, maintain sharpness, prep for race day' },
+  { id: 1, name: 'Phase 1', label: 'Foundation', weeks: [1, 2, 3, 4], description: 'Learn the movements, build base aerobic fitness, easy adaptation' },
+  { id: 2, name: 'Phase 2', label: 'Build', weeks: [5, 6, 7, 8], description: 'Increase volume, introduce race-pace running, full station circuits' },
+  { id: 3, name: 'Phase 3', label: 'Peak', weeks: [9, 10, 11, 12, 13], description: 'Race-intensity training, peak long runs, full Hyrox simulations' },
+  { id: 4, name: 'Phase 4', label: 'Taper', weeks: [14, 15, 16], description: 'Reduce volume, maintain sharpness, prep for race day' },
 ]
 
 export const HYROX_STATIONS = [
-  { id: 'skierg', name: 'SkiErg', distance: 1000, unit: 'm', icon: '⛷️' },
-  { id: 'sled_push', name: 'Sled Push', distance: 50, unit: 'm', icon: '🛷' },
-  { id: 'sled_pull', name: 'Sled Pull', distance: 50, unit: 'm', icon: '🔗' },
-  { id: 'burpee_jumps', name: 'Burpee Broad Jumps', distance: 80, unit: 'm', icon: '💪' },
-  { id: 'rowing', name: 'Rowing', distance: 1000, unit: 'm', icon: '🚣' },
-  { id: 'farmer_carry', name: 'Farmer Carry', distance: 200, unit: 'm', icon: '🧑‍🌾' },
-  { id: 'sandbag_lunges', name: 'Sandbag Lunges', distance: 100, unit: 'm', icon: '🎒' },
-  { id: 'wall_balls', name: 'Wall Balls', reps: 100, unit: 'reps', icon: '🏀' },
+  { id: 'skierg', name: 'SkiErg', distance: 1000, unit: 'm' },
+  { id: 'sled_push', name: 'Sled Push', distance: 50, unit: 'm' },
+  { id: 'sled_pull', name: 'Sled Pull', distance: 50, unit: 'm' },
+  { id: 'burpee_jumps', name: 'Burpee Broad Jumps', distance: 80, unit: 'm' },
+  { id: 'rowing', name: 'Rowing', distance: 1000, unit: 'm' },
+  { id: 'farmer_carry', name: 'Farmer Carry', distance: 200, unit: 'm' },
+  { id: 'sandbag_lunges', name: 'Sandbag Lunges', distance: 100, unit: 'm' },
+  { id: 'wall_balls', name: 'Wall Balls', reps: 100, unit: 'reps' },
 ]
 
 // Helper to build workout details for each station session

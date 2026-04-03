@@ -1,13 +1,19 @@
 import { useState } from 'react'
-import { Plus, Trophy, Clock, ChevronDown, ChevronRight, TrendingDown, Target } from 'lucide-react'
+import { Plus, Trophy, ChevronDown, TrendingDown, Target } from 'lucide-react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine
 } from 'recharts'
 import { useAppData } from '../hooks/useAppData'
 import { HYROX_STATIONS } from '../data/trainingPlan'
-import { formatTime, formatDate, parseTimeToSeconds } from '../utils/formatters'
+import { formatTime, formatDate } from '../utils/formatters'
 
 const STATION_LIST = HYROX_STATIONS
+
+const INNER = { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 12 }
+const INPUT_SM = {
+  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)',
+  borderRadius: 8, padding: '0.375rem 0.625rem', color: '#fff', outline: 'none', width: '100%',
+}
 
 function SimForm({ onSave, onCancel }) {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
@@ -46,92 +52,79 @@ function SimForm({ onSave, onCancel }) {
 
   return (
     <div className="space-y-4">
-      {/* Total Time Banner */}
       {totalTime > 0 && (
-        <div className="card p-4 text-center border-[#ef4444]/30 bg-[#ef4444]/5">
-          <p className="text-xs text-[#94a3b8] mb-1">Current Total Time</p>
-          <p className="text-4xl font-black text-[#ef4444]">{formatTime(totalTime)}</p>
-          <div className="flex justify-center gap-4 mt-2 text-xs text-[#475569]">
+        <div className="p-4 rounded-2xl text-center" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.13)' }}>
+          <p className="text-xs text-white/30 mb-1">Running Total</p>
+          <p className="text-4xl font-black text-white">{formatTime(totalTime)}</p>
+          <div className="flex justify-center gap-4 mt-2 text-xs text-white/30">
             <span>Stations: {formatTime(totalStationTime)}</span>
             <span>Runs: {formatTime(totalRunTime)}</span>
           </div>
         </div>
       )}
 
-      {/* Date */}
       <div>
-        <label className="block text-xs font-semibold text-[#475569] mb-1.5">Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          className="input-field"
-          style={{ colorScheme: 'dark' }}
-        />
+        <label className="block text-xs font-semibold text-white/32 mb-1.5">Date</label>
+        <input type="date" value={date} onChange={e => setDate(e.target.value)} className="input-field" style={{ colorScheme: 'dark' }} />
       </div>
 
-      {/* Station + Run sequence */}
       <div className="space-y-2">
-        <p className="text-xs font-semibold text-[#475569] uppercase tracking-wider">Stations & Runs</p>
+        <p className="section-title">Stations & Runs</p>
         {STATION_LIST.map((station, i) => (
           <div key={station.id} className="space-y-2">
             {/* Run before station */}
-            <div className="bg-[#22c55e]/5 border border-[#22c55e]/20 rounded-xl p-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-[#22c55e]/20 text-[#22c55e] text-xs flex items-center justify-center font-bold">{i+1}</span>
-                  <span className="text-sm font-semibold text-[#22c55e]">1km Run</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    placeholder="sec"
-                    value={runSplits[i]}
-                    onChange={e => updateRun(i, e.target.value)}
-                    className="w-20 bg-[#111118] text-right text-sm font-bold text-[#22c55e] px-2 py-1.5 rounded-lg border border-[#22c55e]/20 focus:outline-none focus:border-[#22c55e]/50"
-                  />
-                  <span className="text-xs text-[#475569] w-6">s</span>
-                </div>
+            <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full text-white/45 text-xs flex items-center justify-center font-bold"
+                  style={{ background: 'rgba(255,255,255,0.08)' }}>
+                  {i + 1}
+                </span>
+                <span className="text-sm font-semibold text-white/60">1km Run</span>
               </div>
-              {runSplits[i] && <p className="text-xs text-[#22c55e]/60 mt-1 text-right">{formatTime(Number(runSplits[i]))}</p>}
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  placeholder="sec"
+                  value={runSplits[i]}
+                  onChange={e => updateRun(i, e.target.value)}
+                  className="w-20 text-right text-sm font-bold text-white/75 focus:outline-none"
+                  style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.75)' }}
+                />
+                <span className="text-xs text-white/28">s</span>
+              </div>
             </div>
+            {runSplits[i] && (
+              <p className="text-xs text-white/38 text-right pr-1">{formatTime(Number(runSplits[i]))}</p>
+            )}
 
             {/* Station */}
-            <div className="bg-[#111118] border border-[#2a2a3d] rounded-xl p-3">
+            <div className="rounded-xl p-3" style={INNER}>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">{station.icon}</span>
                 <div className="flex-1">
-                  <p className="text-sm font-bold text-[#f1f5f9]">{station.name}</p>
-                  <p className="text-xs text-[#475569]">
+                  <p className="text-sm font-bold text-white/82">{station.name}</p>
+                  <p className="text-xs text-white/30">
                     {station.distance ? `${station.distance}${station.unit}` : `${station.reps} ${station.unit}`}
                   </p>
                 </div>
                 {stations[station.id]?.time && (
-                  <span className="text-sm font-black text-[#f97316]">{formatTime(Number(stations[station.id].time))}</span>
+                  <span className="text-sm font-black text-white/70">{formatTime(Number(stations[station.id].time))}</span>
                 )}
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-xs text-[#475569] block mb-1">Time (sec)</label>
-                  <input
-                    type="number"
-                    placeholder="e.g. 280"
-                    value={stations[station.id]?.time || ''}
-                    onChange={e => updateStation(station.id, 'time', e.target.value)}
-                    className="w-full bg-[#21212e] border border-[#333348] rounded-lg px-3 py-2 text-sm text-[#f1f5f9] focus:outline-none focus:border-[#f97316]"
-                  />
+                  <label className="text-xs text-white/28 block mb-1">Time (sec)</label>
+                  <input type="number" placeholder="e.g. 280" value={stations[station.id]?.time || ''}
+                    onChange={e => updateStation(station.id, 'time', e.target.value)} style={INPUT_SM} />
                 </div>
                 <div>
-                  <label className="text-xs text-[#475569] block mb-1">
+                  <label className="text-xs text-white/28 block mb-1">
                     {station.unit === 'reps' ? 'Reps Done' : 'Weight (kg)'}
                   </label>
-                  <input
-                    type="number"
+                  <input type="number"
                     placeholder={station.unit === 'reps' ? '100' : '20'}
                     value={station.unit === 'reps' ? (stations[station.id]?.reps || '') : (stations[station.id]?.weight || '')}
                     onChange={e => updateStation(station.id, station.unit === 'reps' ? 'reps' : 'weight', e.target.value)}
-                    className="w-full bg-[#21212e] border border-[#333348] rounded-lg px-3 py-2 text-sm text-[#f1f5f9] focus:outline-none focus:border-[#f97316]"
-                  />
+                    style={INPUT_SM} />
                 </div>
               </div>
             </div>
@@ -139,16 +132,11 @@ function SimForm({ onSave, onCancel }) {
         ))}
       </div>
 
-      {/* Notes */}
       <div>
-        <label className="block text-xs font-semibold text-[#475569] mb-1.5">Notes</label>
-        <textarea
-          value={notes}
-          onChange={e => setNotes(e.target.value)}
-          placeholder="How did it go? Any station PRs or struggles?"
-          rows={2}
-          className="input-field resize-none"
-        />
+        <label className="block text-xs font-semibold text-white/32 mb-1.5">Notes</label>
+        <textarea value={notes} onChange={e => setNotes(e.target.value)}
+          placeholder="How did it go? Any station PRs or struggles?" rows={2}
+          className="input-field resize-none" />
       </div>
 
       <div className="flex gap-3">
@@ -161,54 +149,52 @@ function SimForm({ onSave, onCancel }) {
   )
 }
 
-function SimCard({ sim, bestTime, isFirst }) {
+function SimCard({ sim, bestTime }) {
   const [expanded, setExpanded] = useState(false)
   const isBest = sim.totalTime === bestTime
-  const simNum = isFirst ? null : null
 
   return (
-    <div className={`card overflow-hidden ${isBest ? 'border-[#f59e0b]/40 bg-[#f59e0b]/5' : ''}`}>
+    <div className={`glass overflow-hidden ${isBest ? 'glass-active' : ''}`}>
       <button className="w-full p-4 text-left" onClick={() => setExpanded(e => !e)}>
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              {isBest && <span className="text-xs font-black text-[#f59e0b] bg-[#f59e0b]/10 px-2 py-0.5 rounded-full">🏆 PB</span>}
-              <span className="text-xs text-[#475569]">{formatDate(sim.date, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+              {isBest && (
+                <span className="text-xs font-black text-white bg-white/15 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <Trophy size={10} /> PB
+                </span>
+              )}
+              <span className="text-xs text-white/30">{formatDate(sim.date, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
             </div>
-            <p className="text-3xl font-black text-[#f1f5f9]">{formatTime(sim.totalTime)}</p>
+            <p className="text-3xl font-black text-white">{formatTime(sim.totalTime)}</p>
           </div>
-          <div className="text-right">
-            <ChevronDown size={18} className={`text-[#475569] transition-transform ${expanded ? 'rotate-180' : ''}`} />
-          </div>
+          <ChevronDown size={18} className={`text-white/28 transition-transform ${expanded ? 'rotate-180' : ''}`} />
         </div>
-        <div className="flex gap-4 mt-2 text-xs text-[#475569]">
+        <div className="flex gap-4 mt-2 text-xs text-white/30">
           <span>Stations: {formatTime(sim.stations.reduce((s, st) => s + (st.time || 0), 0))}</span>
           <span>Runs: {formatTime(sim.runSplits.reduce((s, t) => s + (t || 0), 0))}</span>
         </div>
       </button>
 
       {expanded && (
-        <div className="px-4 pb-4 border-t border-[#2a2a3d] pt-3 space-y-3">
-          {/* Splits table */}
+        <div className="px-4 pb-4 pt-3 space-y-3" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
           <div>
-            <p className="text-xs font-semibold text-[#475569] uppercase tracking-wider mb-2">Split Times</p>
+            <p className="section-title mb-2">Split Times</p>
             <div className="space-y-1.5">
               {sim.stations.map((st, i) => (
                 <div key={st.id}>
-                  {/* Run split */}
                   <div className="flex items-center justify-between py-1 px-2">
-                    <span className="text-xs text-[#22c55e]">Run {i + 1} (1km)</span>
-                    <span className="text-xs font-bold text-[#22c55e]">
+                    <span className="text-xs text-white/45">Run {i + 1} (1km)</span>
+                    <span className="text-xs font-bold text-white/55">
                       {sim.runSplits[i] ? formatTime(sim.runSplits[i]) : '—'}
                     </span>
                   </div>
-                  {/* Station */}
-                  <div className="flex items-center justify-between py-1 px-2 bg-[#111118] rounded-lg">
-                    <span className="text-xs text-[#94a3b8]">{st.name}</span>
+                  <div className="flex items-center justify-between py-1 px-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                    <span className="text-xs text-white/38">{st.name}</span>
                     <div className="flex items-center gap-2">
-                      {st.weight && <span className="text-xs text-[#6366f1]">{st.weight}kg</span>}
-                      {st.reps && <span className="text-xs text-[#6366f1]">{st.reps} reps</span>}
-                      <span className="text-xs font-bold text-[#f97316]">
+                      {st.weight && <span className="text-xs text-white/45">{st.weight}kg</span>}
+                      {st.reps && <span className="text-xs text-white/45">{st.reps} reps</span>}
+                      <span className="text-xs font-bold text-white/70">
                         {st.time ? formatTime(st.time) : '—'}
                       </span>
                     </div>
@@ -218,8 +204,8 @@ function SimCard({ sim, bestTime, isFirst }) {
             </div>
           </div>
           {sim.notes && (
-            <div className="bg-[#111118] rounded-xl p-3">
-              <p className="text-xs text-[#475569] italic">"{sim.notes}"</p>
+            <div className="rounded-xl p-3" style={INNER}>
+              <p className="text-xs text-white/38 italic">"{sim.notes}"</p>
             </div>
           )}
         </div>
@@ -232,7 +218,6 @@ function SimProgressChart({ sims }) {
   if (sims.length < 2) return null
   const data = [...sims].reverse().map((sim, i) => ({
     name: `Sim ${i + 1}`,
-    date: formatDate(sim.date),
     total: Math.round(sim.totalTime / 60 * 10) / 10,
     stations: Math.round(sim.stations.reduce((s, st) => s + (st.time || 0), 0) / 60 * 10) / 10,
     runs: Math.round(sim.runSplits.reduce((s, t) => s + (t || 0), 0) / 60 * 10) / 10,
@@ -241,42 +226,50 @@ function SimProgressChart({ sims }) {
   const best = Math.min(...data.map(d => d.total))
 
   return (
-    <div className="card p-4">
+    <div className="glass p-4">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-bold text-[#f1f5f9]">Simulation Progress</p>
-        <div className="flex items-center gap-1 text-xs text-[#22c55e]">
-          <TrendingDown size={12} /> Faster over time
+        <p className="text-sm font-bold text-white/82">Simulation Progress</p>
+        <div className="flex items-center gap-1 text-xs text-white/45">
+          <TrendingDown size={12} /> Improving
         </div>
       </div>
       <ResponsiveContainer width="100%" height={180}>
         <LineChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#2a2a3d" />
-          <XAxis dataKey="name" tick={{ fill: '#475569', fontSize: 11 }} />
-          <YAxis tick={{ fill: '#475569', fontSize: 11 }} unit="m" />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+          <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.28)', fontSize: 11 }} />
+          <YAxis tick={{ fill: 'rgba(255,255,255,0.28)', fontSize: 11 }} unit="m" />
           <Tooltip
-            contentStyle={{ backgroundColor: '#1a1a24', border: '1px solid #333348', borderRadius: 8 }}
-            labelStyle={{ color: '#94a3b8', fontSize: 11 }}
-            itemStyle={{ color: '#f1f5f9', fontSize: 11 }}
+            contentStyle={{ backgroundColor: 'rgba(8,8,8,0.92)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8 }}
+            labelStyle={{ color: 'rgba(255,255,255,0.45)', fontSize: 11 }}
+            itemStyle={{ color: 'rgba(255,255,255,0.75)', fontSize: 11 }}
             formatter={(val, name) => [`${val} min`, name === 'total' ? 'Total' : name === 'stations' ? 'Stations' : 'Runs']}
           />
-          <ReferenceLine y={best} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: 'PB', fill: '#f59e0b', fontSize: 10 }} />
-          <Line type="monotone" dataKey="total" stroke="#ef4444" strokeWidth={2.5} dot={{ fill: '#ef4444', r: 4 }} name="total" />
-          <Line type="monotone" dataKey="stations" stroke="#f97316" strokeWidth={1.5} dot={false} strokeDasharray="4 2" name="stations" />
-          <Line type="monotone" dataKey="runs" stroke="#22c55e" strokeWidth={1.5} dot={false} strokeDasharray="4 2" name="runs" />
+          <ReferenceLine y={best} stroke="rgba(255,255,255,0.35)" strokeDasharray="3 3"
+            label={{ value: 'PB', fill: 'rgba(255,255,255,0.45)', fontSize: 10 }} />
+          <Line type="monotone" dataKey="total" stroke="rgba(255,255,255,0.85)" strokeWidth={2.5} dot={{ fill: 'rgba(255,255,255,0.85)', r: 4 }} name="total" />
+          <Line type="monotone" dataKey="stations" stroke="rgba(255,255,255,0.45)" strokeWidth={1.5} dot={false} strokeDasharray="4 2" name="stations" />
+          <Line type="monotone" dataKey="runs" stroke="rgba(255,255,255,0.30)" strokeWidth={1.5} dot={false} strokeDasharray="4 2" name="runs" />
         </LineChart>
       </ResponsiveContainer>
       <div className="flex justify-center gap-4 mt-2">
-        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5 bg-[#ef4444]" /><span className="text-xs text-[#475569]">Total</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5 bg-[#f97316] opacity-70" /><span className="text-xs text-[#475569]">Stations</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5 bg-[#22c55e] opacity-70" /><span className="text-xs text-[#475569]">Runs</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5 bg-white/80" /><span className="text-xs text-white/30">Total</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5 bg-white/40" /><span className="text-xs text-white/30">Stations</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5 bg-white/25" /><span className="text-xs text-white/30">Runs</span></div>
       </div>
     </div>
   )
 }
 
+const tabS = (a) => ({
+  flex: 1, padding: '0.5rem', borderRadius: '0.75rem', fontSize: '0.875rem', fontWeight: 600,
+  minHeight: 44, cursor: 'pointer', transition: 'all 0.15s',
+  background: a ? '#fff' : 'rgba(255,255,255,0.06)', color: a ? '#000' : 'rgba(255,255,255,0.38)',
+  border: a ? 'none' : '1px solid rgba(255,255,255,0.09)',
+})
+
 export default function Hyrox() {
   const { hyroxSims, addHyroxSim } = useAppData()
-  const [view, setView] = useState('history') // 'history' | 'new'
+  const [view, setView] = useState('history')
 
   const bestTime = hyroxSims.length ? Math.min(...hyroxSims.map(s => s.totalTime)) : null
 
@@ -287,46 +280,40 @@ export default function Hyrox() {
 
   return (
     <div className="px-4 pt-6 pb-4">
-      {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h1 className="text-2xl font-black text-[#f1f5f9]">Hyrox Tracker</h1>
-          <p className="text-sm text-[#475569] mt-0.5">{hyroxSims.length} simulation{hyroxSims.length !== 1 ? 's' : ''} logged</p>
+          <h1 className="text-2xl font-black text-white">Hyrox Tracker</h1>
+          <p className="text-sm text-white/30 mt-0.5">{hyroxSims.length} simulation{hyroxSims.length !== 1 ? 's' : ''} logged</p>
         </div>
         {bestTime && (
           <div className="text-right">
-            <p className="text-xs text-[#f59e0b] font-bold flex items-center gap-1 justify-end"><Trophy size={12} /> Best Time</p>
-            <p className="text-lg font-black text-[#f59e0b]">{formatTime(bestTime)}</p>
+            <p className="text-xs text-white/55 font-bold flex items-center gap-1 justify-end">
+              <Trophy size={12} /> Best Time
+            </p>
+            <p className="text-lg font-black text-white">{formatTime(bestTime)}</p>
           </div>
         )}
       </div>
 
-      {/* Stations reference card */}
-      <div className="card p-4 mb-4">
-        <p className="text-xs font-semibold text-[#475569] uppercase tracking-wider mb-2">The 8 Stations (in order)</p>
+      {/* Stations reference */}
+      <div className="glass p-4 mb-4">
+        <p className="section-title mb-2">The 8 Stations (in order)</p>
         <div className="grid grid-cols-2 gap-1.5">
           {STATION_LIST.map((s, i) => (
             <div key={s.id} className="flex items-center gap-2 text-xs">
-              <span className="w-4 h-4 rounded-full bg-[#f97316]/20 text-[#f97316] flex items-center justify-center font-bold text-[10px]">{i+1}</span>
-              <span className="text-[#94a3b8]">{s.icon} {s.name}</span>
+              <span className="w-4 h-4 rounded-full text-white/45 flex items-center justify-center font-bold text-[10px]"
+                style={{ background: 'rgba(255,255,255,0.08)' }}>{i + 1}</span>
+              <span className="text-white/55">{s.name}</span>
             </div>
           ))}
         </div>
-        <p className="text-xs text-[#475569] mt-2">+ 1km run before each station = 8km total running</p>
+        <p className="text-xs text-white/28 mt-2">+ 1km run before each station = 8km total running</p>
       </div>
 
       {/* View toggle */}
       <div className="flex gap-2 mb-5">
-        <button
-          onClick={() => setView('history')}
-          className={`flex-1 py-2 rounded-xl text-sm font-semibold min-h-[44px] transition-colors ${view === 'history' ? 'bg-[#f97316] text-white' : 'bg-[#1a1a24] text-[#475569]'}`}
-        >
-          History
-        </button>
-        <button
-          onClick={() => setView('new')}
-          className={`flex-1 py-2 rounded-xl text-sm font-semibold min-h-[44px] transition-colors flex items-center justify-center gap-2 ${view === 'new' ? 'bg-[#f97316] text-white' : 'bg-[#1a1a24] text-[#475569]'}`}
-        >
+        <button onClick={() => setView('history')} style={tabS(view === 'history')}>History</button>
+        <button onClick={() => setView('new')} style={{ ...tabS(view === 'new'), display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
           <Plus size={16} /> Log New Sim
         </button>
       </div>
@@ -337,15 +324,13 @@ export default function Hyrox() {
 
       {view === 'history' && (
         <div className="space-y-4">
-          {/* Chart */}
           <SimProgressChart sims={hyroxSims} />
 
-          {/* Sim list */}
           {hyroxSims.length === 0 ? (
-            <div className="card p-8 text-center">
-              <Target size={40} className="text-[#2a2a3d] mx-auto mb-3" />
-              <p className="text-[#94a3b8] font-semibold">No simulations yet</p>
-              <p className="text-xs text-[#475569] mt-1 mb-4">Log your first Hyrox simulation to start tracking your progress.</p>
+            <div className="glass p-8 text-center">
+              <Target size={40} className="text-white/12 mx-auto mb-3" />
+              <p className="text-white/55 font-semibold">No simulations yet</p>
+              <p className="text-xs text-white/28 mt-1 mb-4">Log your first Hyrox simulation to start tracking your progress.</p>
               <button onClick={() => setView('new')} className="btn-primary mx-auto">
                 Log First Sim
               </button>
