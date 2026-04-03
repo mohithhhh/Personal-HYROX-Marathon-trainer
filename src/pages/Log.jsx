@@ -5,10 +5,11 @@ import { HYROX_STATIONS } from '../data/trainingPlan'
 import { formatDate, formatTime } from '../utils/formatters'
 import { SessionTypeBadge } from '../components/ui/Badge'
 
-const INNER = { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 12 }
+const INNER = { background: 'rgba(51,51,51,0.45)', border: '1px solid rgba(255,102,102,0.12)', borderRadius: 12 }
 const INPUT_SM = {
-  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)',
-  borderRadius: 8, padding: '0.375rem 0.625rem', color: '#fff', outline: 'none', width: '100%',
+  background: 'rgba(51,51,51,0.50)', border: '1px solid rgba(255,102,102,0.18)',
+  borderRadius: 8, padding: '0.5rem 0.625rem', color: '#fff', outline: 'none',
+  width: '100%', fontSize: '16px', WebkitAppearance: 'none',
 }
 
 const SESSION_TYPES = [
@@ -21,7 +22,7 @@ const SESSION_TYPES = [
 function Field({ label, children }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-white/32 mb-1.5">{label}</label>
+      <label className="block text-xs font-semibold mb-1.5" style={{ color: 'rgba(255,102,102,0.65)' }}>{label}</label>
       {children}
     </div>
   )
@@ -32,8 +33,10 @@ function NumInput({ label, value, onChange, unit, step = 1, min = 0, placeholder
     <Field label={label}>
       <div className="relative">
         <input type="number" value={value} onChange={e => onChange(e.target.value)}
-          placeholder={placeholder} step={step} min={min} className="input-field pr-12" />
-        {unit && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/28 font-medium">{unit}</span>}
+          placeholder={placeholder} step={step} min={min}
+          className="input-field pr-12"
+          style={{ fontSize: '16px' }} />
+        {unit && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium" style={{ color: 'rgba(255,102,102,0.50)' }}>{unit}</span>}
       </div>
     </Field>
   )
@@ -44,12 +47,12 @@ function EffortSlider({ value, onChange }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <label className="text-xs font-semibold text-white/32">Effort (RPE)</label>
+        <label className="text-xs font-semibold" style={{ color: 'rgba(255,102,102,0.65)' }}>Effort (RPE)</label>
         <span className="text-sm font-bold text-white/80">{value}/10</span>
       </div>
       <input type="range" min={1} max={10} value={value} onChange={e => onChange(Number(e.target.value))}
         className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
-        style={{ background: `linear-gradient(to right, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.7) ${pct}%, rgba(255,255,255,0.10) ${pct}%, rgba(255,255,255,0.10) 100%)` }}
+        style={{ background: `linear-gradient(to right, #ff6666 0%, #ff6666 ${pct}%, rgba(51,51,51,0.70) ${pct}%, rgba(51,51,51,0.70) 100%)` }}
       />
     </div>
   )
@@ -66,7 +69,9 @@ function RunLogger({ data, onChange }) {
       <EffortSlider value={data.effort || 5} onChange={v => onChange('effort', v)} />
       <Field label="Notes">
         <textarea value={data.notes} onChange={e => onChange('notes', e.target.value)}
-          placeholder="How did it feel?" rows={2} className="input-field resize-none" />
+          placeholder="How did it feel?" rows={2}
+          className="input-field resize-none"
+          style={{ fontSize: '16px' }} />
       </Field>
     </div>
   )
@@ -81,19 +86,19 @@ function StationRow({ station, data, onChange }) {
           <p className="text-sm font-semibold text-white/82">{station.name}</p>
           <p className="text-xs text-white/30">{station.distance ? `${station.distance}${station.unit}` : `${station.reps} ${station.unit}`}</p>
         </div>
-        {data.time && <span className="text-xs font-bold text-white/70 mr-1">{formatTime(Number(data.time))}</span>}
-        <ChevronDown size={15} className={`text-white/28 transition-transform ${open ? 'rotate-180' : ''}`} />
+        {data.time && <span className="text-xs font-bold mr-1" style={{ color: '#ff6666' }}>{formatTime(Number(data.time))}</span>}
+        <ChevronDown size={15} className={`transition-transform ${open ? 'rotate-180' : ''}`} style={{ color: 'rgba(255,102,102,0.45)' }} />
       </button>
       {open && (
-        <div className="px-3 pb-3 pt-1 space-y-2" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="px-3 pb-3 pt-1 space-y-2" style={{ borderTop: '1px solid rgba(255,102,102,0.10)' }}>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-xs text-white/28 block mb-1">Time (sec)</label>
+              <label className="text-xs block mb-1" style={{ color: 'rgba(255,102,102,0.50)' }}>Time (sec)</label>
               <input type="number" value={data.time || ''} onChange={e => onChange('time', e.target.value)}
                 placeholder="240" style={INPUT_SM} />
             </div>
             <div>
-              <label className="text-xs text-white/28 block mb-1">{station.unit === 'reps' ? 'Reps' : 'Weight (kg)'}</label>
+              <label className="text-xs block mb-1" style={{ color: 'rgba(255,102,102,0.50)' }}>{station.unit === 'reps' ? 'Reps' : 'Weight (kg)'}</label>
               <input type="number" value={station.unit === 'reps' ? (data.reps || '') : (data.weight || '')}
                 onChange={e => onChange(station.unit === 'reps' ? 'reps' : 'weight', e.target.value)}
                 placeholder={station.unit === 'reps' ? '100' : '20'} style={INPUT_SM} />
@@ -117,7 +122,9 @@ function StationsLogger({ data, onChange }) {
       <NumInput label="Total Duration (min)" value={data.duration} onChange={v => onChange('duration', v)} unit="min" />
       <Field label="Notes">
         <textarea value={data.notes} onChange={e => onChange('notes', e.target.value)}
-          placeholder="How did it feel?" rows={2} className="input-field resize-none" />
+          placeholder="How did it feel?" rows={2}
+          className="input-field resize-none"
+          style={{ fontSize: '16px' }} />
       </Field>
     </div>
   )
@@ -138,9 +145,9 @@ function HyroxSimLogger({ data, onChange }) {
   return (
     <div className="space-y-4">
       {total > 0 && (
-        <div className="p-4 rounded-2xl text-center" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.13)' }}>
-          <p className="text-xs text-white/30 mb-1">Running Total</p>
-          <p className="text-4xl font-black text-white">{formatTime(total)}</p>
+        <div className="p-4 rounded-2xl text-center" style={{ background: 'rgba(255,102,102,0.10)', border: '1px solid rgba(255,102,102,0.30)' }}>
+          <p className="text-xs mb-1" style={{ color: 'rgba(255,102,102,0.60)' }}>Running Total</p>
+          <p className="text-4xl font-black" style={{ color: '#ff6666' }}>{formatTime(total)}</p>
           <div className="flex justify-center gap-4 mt-2 text-xs text-white/30">
             <span>Stations: {formatTime(stationSecs)}</span>
             <span>Runs: {formatTime(runSecs)}</span>
@@ -149,14 +156,14 @@ function HyroxSimLogger({ data, onChange }) {
       )}
       {HYROX_STATIONS.map((station, i) => (
         <div key={station.id} className="space-y-2">
-          <div className="flex items-center justify-between p-2.5 rounded-xl"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="flex items-center justify-between p-3 rounded-xl"
+            style={{ background: 'rgba(51,51,51,0.35)', border: '1px solid rgba(255,102,102,0.10)' }}>
             <span className="text-xs font-semibold text-white/55">Run {i + 1} — 1km</span>
             <div className="flex items-center gap-2">
               <input type="number" placeholder="sec" value={(data.runSplits || [])[i] || ''}
                 onChange={e => updateRun(i, e.target.value)}
-                className="w-20 text-right text-xs font-bold text-white/75 focus:outline-none"
-                style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.75)' }} />
+                className="w-20 text-right text-xs font-bold focus:outline-none"
+                style={{ background: 'transparent', border: 'none', color: '#ff6666', fontSize: '16px' }} />
               <span className="text-xs text-white/28">s</span>
             </div>
           </div>
@@ -166,7 +173,9 @@ function HyroxSimLogger({ data, onChange }) {
       ))}
       <Field label="Notes">
         <textarea value={data.notes} onChange={e => onChange('notes', e.target.value)}
-          placeholder="PRs? Struggles? Highlights..." rows={2} className="input-field resize-none" />
+          placeholder="PRs? Struggles? Highlights..." rows={2}
+          className="input-field resize-none"
+          style={{ fontSize: '16px' }} />
       </Field>
     </div>
   )
@@ -183,15 +192,15 @@ function LogHistory({ logs, onDelete }) {
     <div className="space-y-3">
       {logs.slice(0, 20).map(log => (
         <div key={log.id} className="glass p-4">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <SessionTypeBadge type={log.type} />
                 <span className="text-xs text-white/30">{formatDate(log.date)}</span>
               </div>
-              <div className="flex gap-4 text-sm">
+              <div className="flex flex-wrap gap-3 text-sm">
                 {log.distance && (
-                  <span className="flex items-center gap-1 text-white/75 font-semibold">
+                  <span className="flex items-center gap-1 font-semibold" style={{ color: '#ff6666' }}>
                     <MapPin size={11} className="text-white/35" /> {log.distance}km
                   </span>
                 )}
@@ -209,7 +218,7 @@ function LogHistory({ logs, onDelete }) {
               {log.notes && <p className="text-xs text-white/28 mt-1.5 italic">"{log.notes}"</p>}
             </div>
             <button onClick={() => onDelete(log.id)}
-              className="w-9 h-9 flex items-center justify-center rounded-lg text-white/25 active:text-white/60">
+              className="w-9 h-9 flex items-center justify-center rounded-lg text-white/25 active:text-white/60 shrink-0">
               <Trash2 size={14} />
             </button>
           </div>
@@ -251,8 +260,9 @@ export default function Log() {
   const tabS = (a) => ({
     flex: 1, padding: '0.5rem', borderRadius: '0.75rem', fontSize: '0.875rem', fontWeight: 600,
     minHeight: 44, cursor: 'pointer', transition: 'all 0.15s',
-    background: a ? '#fff' : 'rgba(255,255,255,0.06)', color: a ? '#000' : 'rgba(255,255,255,0.38)',
-    border: a ? 'none' : '1px solid rgba(255,255,255,0.09)',
+    background: a ? '#ff6666' : 'rgba(51,51,51,0.55)',
+    color: a ? '#000' : 'rgba(255,255,255,0.45)',
+    border: a ? 'none' : '1px solid rgba(255,102,102,0.15)',
   })
 
   return (
@@ -266,8 +276,8 @@ export default function Log() {
       {tab === 'log' && (
         <div className="space-y-5">
           {submitted && (
-            <div className="glass p-4 flex items-center gap-3" style={{ border: '1px solid rgba(255,255,255,0.25)' }}>
-              <CheckCircle size={18} strokeWidth={1.8} className="text-white/80" />
+            <div className="glass p-4 flex items-center gap-3" style={{ border: '1px solid rgba(255,102,102,0.45)' }}>
+              <CheckCircle size={18} strokeWidth={1.8} style={{ color: '#ff6666' }} />
               <p className="text-sm font-semibold text-white/80">Session logged!</p>
             </div>
           )}
@@ -282,16 +292,16 @@ export default function Log() {
                   <button key={t.id} onClick={() => setType(t.id)}
                     className="p-3 rounded-xl text-left min-h-[44px]"
                     style={{
-                      background: active ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.04)',
-                      border: active ? '1px solid rgba(255,255,255,0.28)' : '1px solid rgba(255,255,255,0.07)',
+                      background: active ? 'rgba(255,102,102,0.15)' : 'rgba(51,51,51,0.45)',
+                      border: active ? '1px solid rgba(255,102,102,0.50)' : '1px solid rgba(255,102,102,0.12)',
                       transition: 'all 0.15s',
                     }}
                   >
                     <div className="flex items-center gap-2">
-                      <Icon size={18} strokeWidth={1.6} className={active ? 'text-white/85' : 'text-white/32'} />
-                      <div>
-                        <p className={`text-sm font-bold ${active ? 'text-white' : 'text-white/60'}`}>{t.label}</p>
-                        <p className="text-xs text-white/25">{t.desc}</p>
+                      <Icon size={18} strokeWidth={1.6} style={{ color: active ? '#ff6666' : 'rgba(255,255,255,0.32)' }} />
+                      <div className="min-w-0">
+                        <p className={`text-sm font-bold ${active ? '' : 'text-white/60'}`} style={active ? { color: '#ff6666' } : {}}>{t.label}</p>
+                        <p className="text-xs text-white/25 truncate">{t.desc}</p>
                       </div>
                     </div>
                   </button>
@@ -301,7 +311,8 @@ export default function Log() {
           </div>
 
           <Field label="Date">
-            <input type="date" value={date} onChange={e => setDate(e.target.value)} className="input-field" style={{ colorScheme: 'dark' }} />
+            <input type="date" value={date} onChange={e => setDate(e.target.value)}
+              className="input-field" style={{ colorScheme: 'dark', fontSize: '16px' }} />
           </Field>
 
           {type === 'run' && <RunLogger data={form} onChange={updateField} />}

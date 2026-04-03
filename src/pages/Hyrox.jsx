@@ -9,10 +9,11 @@ import { formatTime, formatDate } from '../utils/formatters'
 
 const STATION_LIST = HYROX_STATIONS
 
-const INNER = { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 12 }
+const INNER = { background: 'rgba(51,51,51,0.45)', border: '1px solid rgba(255,102,102,0.12)', borderRadius: 12 }
 const INPUT_SM = {
-  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)',
-  borderRadius: 8, padding: '0.375rem 0.625rem', color: '#fff', outline: 'none', width: '100%',
+  background: 'rgba(51,51,51,0.50)', border: '1px solid rgba(255,102,102,0.18)',
+  borderRadius: 8, padding: '0.5rem 0.625rem', color: '#fff', outline: 'none',
+  width: '100%', fontSize: '16px', WebkitAppearance: 'none',
 }
 
 function SimForm({ onSave, onCancel }) {
@@ -53,9 +54,9 @@ function SimForm({ onSave, onCancel }) {
   return (
     <div className="space-y-4">
       {totalTime > 0 && (
-        <div className="p-4 rounded-2xl text-center" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.13)' }}>
-          <p className="text-xs text-white/30 mb-1">Running Total</p>
-          <p className="text-4xl font-black text-white">{formatTime(totalTime)}</p>
+        <div className="p-4 rounded-2xl text-center" style={{ background: 'rgba(255,102,102,0.10)', border: '1px solid rgba(255,102,102,0.30)' }}>
+          <p className="text-xs mb-1" style={{ color: 'rgba(255,102,102,0.60)' }}>Running Total</p>
+          <p className="text-4xl font-black" style={{ color: '#ff6666' }}>{formatTime(totalTime)}</p>
           <div className="flex justify-center gap-4 mt-2 text-xs text-white/30">
             <span>Stations: {formatTime(totalStationTime)}</span>
             <span>Runs: {formatTime(totalRunTime)}</span>
@@ -72,11 +73,11 @@ function SimForm({ onSave, onCancel }) {
         <p className="section-title">Stations & Runs</p>
         {STATION_LIST.map((station, i) => (
           <div key={station.id} className="space-y-2">
-            {/* Run before station */}
-            <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            {/* Run row */}
+            <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'rgba(51,51,51,0.35)', border: '1px solid rgba(255,102,102,0.10)' }}>
               <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full text-white/45 text-xs flex items-center justify-center font-bold"
-                  style={{ background: 'rgba(255,255,255,0.08)' }}>
+                <span className="w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold"
+                  style={{ background: 'rgba(255,102,102,0.15)', color: '#ff6666' }}>
                   {i + 1}
                 </span>
                 <span className="text-sm font-semibold text-white/60">1km Run</span>
@@ -87,8 +88,8 @@ function SimForm({ onSave, onCancel }) {
                   placeholder="sec"
                   value={runSplits[i]}
                   onChange={e => updateRun(i, e.target.value)}
-                  className="w-20 text-right text-sm font-bold text-white/75 focus:outline-none"
-                  style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.75)' }}
+                  className="w-20 text-right text-sm font-bold focus:outline-none"
+                  style={{ background: 'transparent', border: 'none', color: '#ff6666', fontSize: '16px' }}
                 />
                 <span className="text-xs text-white/28">s</span>
               </div>
@@ -106,18 +107,16 @@ function SimForm({ onSave, onCancel }) {
                     {station.distance ? `${station.distance}${station.unit}` : `${station.reps} ${station.unit}`}
                   </p>
                 </div>
-                {stations[station.id]?.time && (
-                  <span className="text-sm font-black text-white/70">{formatTime(Number(stations[station.id].time))}</span>
-                )}
+          <span className="text-sm font-black" style={{ color: '#ff6666' }}>{formatTime(Number(stations[station.id].time))}</span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-xs text-white/28 block mb-1">Time (sec)</label>
+              <label className="text-xs block mb-1" style={{ color: 'rgba(255,102,102,0.50)' }}>Time (sec)</label>
                   <input type="number" placeholder="e.g. 280" value={stations[station.id]?.time || ''}
                     onChange={e => updateStation(station.id, 'time', e.target.value)} style={INPUT_SM} />
                 </div>
                 <div>
-                  <label className="text-xs text-white/28 block mb-1">
+                  <label className="text-xs block mb-1" style={{ color: 'rgba(255,102,102,0.50)' }}>
                     {station.unit === 'reps' ? 'Reps Done' : 'Weight (kg)'}
                   </label>
                   <input type="number"
@@ -160,9 +159,10 @@ function SimCard({ sim, bestTime }) {
           <div>
             <div className="flex items-center gap-2 mb-1">
               {isBest && (
-                <span className="text-xs font-black text-white bg-white/15 px-2 py-0.5 rounded-full flex items-center gap-1">
-                  <Trophy size={10} /> PB
-                </span>
+                <span className="text-xs font-black px-2 py-0.5 rounded-full flex items-center gap-1"
+                style={{ background: 'rgba(255,102,102,0.18)', border: '1px solid rgba(255,102,102,0.40)', color: '#ff6666' }}>
+                <Trophy size={10} /> PB
+              </span>
               )}
               <span className="text-xs text-white/30">{formatDate(sim.date, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
             </div>
@@ -235,26 +235,26 @@ function SimProgressChart({ sims }) {
       </div>
       <ResponsiveContainer width="100%" height={180}>
         <LineChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,102,102,0.10)" />
           <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.28)', fontSize: 11 }} />
           <YAxis tick={{ fill: 'rgba(255,255,255,0.28)', fontSize: 11 }} unit="m" />
           <Tooltip
-            contentStyle={{ backgroundColor: 'rgba(8,8,8,0.92)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8 }}
-            labelStyle={{ color: 'rgba(255,255,255,0.45)', fontSize: 11 }}
+            contentStyle={{ backgroundColor: 'rgba(0,0,0,0.95)', border: '1px solid rgba(255,102,102,0.25)', borderRadius: 8 }}
+            labelStyle={{ color: 'rgba(255,102,102,0.70)', fontSize: 11 }}
             itemStyle={{ color: 'rgba(255,255,255,0.75)', fontSize: 11 }}
             formatter={(val, name) => [`${val} min`, name === 'total' ? 'Total' : name === 'stations' ? 'Stations' : 'Runs']}
           />
-          <ReferenceLine y={best} stroke="rgba(255,255,255,0.35)" strokeDasharray="3 3"
-            label={{ value: 'PB', fill: 'rgba(255,255,255,0.45)', fontSize: 10 }} />
-          <Line type="monotone" dataKey="total" stroke="rgba(255,255,255,0.85)" strokeWidth={2.5} dot={{ fill: 'rgba(255,255,255,0.85)', r: 4 }} name="total" />
-          <Line type="monotone" dataKey="stations" stroke="rgba(255,255,255,0.45)" strokeWidth={1.5} dot={false} strokeDasharray="4 2" name="stations" />
-          <Line type="monotone" dataKey="runs" stroke="rgba(255,255,255,0.30)" strokeWidth={1.5} dot={false} strokeDasharray="4 2" name="runs" />
+          <ReferenceLine y={best} stroke="rgba(255,102,102,0.50)" strokeDasharray="3 3"
+            label={{ value: 'PB', fill: 'rgba(255,102,102,0.65)', fontSize: 10 }} />
+          <Line type="monotone" dataKey="total" stroke="#ff6666" strokeWidth={2.5} dot={{ fill: '#ff6666', r: 4 }} name="total" />
+          <Line type="monotone" dataKey="stations" stroke="rgba(255,102,102,0.50)" strokeWidth={1.5} dot={false} strokeDasharray="4 2" name="stations" />
+          <Line type="monotone" dataKey="runs" stroke="rgba(255,102,102,0.30)" strokeWidth={1.5} dot={false} strokeDasharray="4 2" name="runs" />
         </LineChart>
       </ResponsiveContainer>
       <div className="flex justify-center gap-4 mt-2">
-        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5 bg-white/80" /><span className="text-xs text-white/30">Total</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5 bg-white/40" /><span className="text-xs text-white/30">Stations</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5 bg-white/25" /><span className="text-xs text-white/30">Runs</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5" style={{ background: '#ff6666' }} /><span className="text-xs text-white/30">Total</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5" style={{ background: 'rgba(255,102,102,0.50)' }} /><span className="text-xs text-white/30">Stations</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-0.5" style={{ background: 'rgba(255,102,102,0.30)' }} /><span className="text-xs text-white/30">Runs</span></div>
       </div>
     </div>
   )
@@ -263,8 +263,9 @@ function SimProgressChart({ sims }) {
 const tabS = (a) => ({
   flex: 1, padding: '0.5rem', borderRadius: '0.75rem', fontSize: '0.875rem', fontWeight: 600,
   minHeight: 44, cursor: 'pointer', transition: 'all 0.15s',
-  background: a ? '#fff' : 'rgba(255,255,255,0.06)', color: a ? '#000' : 'rgba(255,255,255,0.38)',
-  border: a ? 'none' : '1px solid rgba(255,255,255,0.09)',
+  background: a ? '#ff6666' : 'rgba(51,51,51,0.55)',
+  color: a ? '#000' : 'rgba(255,255,255,0.45)',
+  border: a ? 'none' : '1px solid rgba(255,102,102,0.15)',
 })
 
 export default function Hyrox() {
@@ -301,8 +302,8 @@ export default function Hyrox() {
         <div className="grid grid-cols-2 gap-1.5">
           {STATION_LIST.map((s, i) => (
             <div key={s.id} className="flex items-center gap-2 text-xs">
-              <span className="w-4 h-4 rounded-full text-white/45 flex items-center justify-center font-bold text-[10px]"
-                style={{ background: 'rgba(255,255,255,0.08)' }}>{i + 1}</span>
+              <span className="w-4 h-4 rounded-full flex items-center justify-center font-bold text-[10px]"
+                style={{ background: 'rgba(255,102,102,0.15)', color: '#ff6666' }}>{i + 1}</span>
               <span className="text-white/55">{s.name}</span>
             </div>
           ))}

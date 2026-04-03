@@ -5,7 +5,7 @@ import { FOODS, FOOD_CATEGORIES, SUPPLEMENTS } from '../data/foods'
 import ProgressBar from '../components/ui/ProgressBar'
 import ProgressRing from '../components/ui/ProgressRing'
 
-const INNER = { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 12 }
+const INNER = { background: 'rgba(51,51,51,0.45)', border: '1px solid rgba(255,102,102,0.12)', borderRadius: 12 }
 
 function MacroSummary({ meals, user }) {
   const totals = meals.reduce((acc, meal) => ({
@@ -21,10 +21,10 @@ function MacroSummary({ meals, user }) {
 
   return (
     <div className="glass p-4">
-      <div className="flex items-center justify-between mb-4">
-        <div>
+      <div className="flex items-center justify-between mb-4 gap-3">
+        <div className="min-w-0">
           <p className="section-title">Today's Macros</p>
-          <p className="text-xs text-white/28 mt-0.5">Target: {proteinTarget}g protein · {caloriesTarget} kcal</p>
+          <p className="text-xs text-white/28 mt-0.5 truncate">Target: {proteinTarget}g protein · {caloriesTarget} kcal</p>
         </div>
         <ProgressRing value={totals.protein} max={proteinTarget} size={64} strokeWidth={6}>
           <div className="text-center">
@@ -68,7 +68,7 @@ function MacroSummary({ meals, user }) {
       {totals.protein > 0 && (
         <div className="mt-3 text-center">
           {proteinPct >= 100
-            ? <p className="text-xs text-white/70 font-semibold">Protein target hit!</p>
+            ? <p className="text-xs font-semibold" style={{ color: '#ff6666' }}>Protein target hit! 🎯</p>
             : <p className="text-xs text-white/45">Need {Math.round(proteinTarget - totals.protein)}g more protein today</p>
           }
           {totals.calories > caloriesTarget + 200
@@ -114,9 +114,9 @@ function FoodSearch({ onAdd }) {
   const pillS = (a) => ({
     padding: '0.375rem 0.75rem', borderRadius: 9999, fontSize: '0.75rem', fontWeight: 600,
     whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.15s', flexShrink: 0,
-    background: a ? '#fff' : 'rgba(255,255,255,0.06)',
-    color: a ? '#000' : 'rgba(255,255,255,0.38)',
-    border: a ? 'none' : '1px solid rgba(255,255,255,0.09)',
+    background: a ? '#ff6666' : 'rgba(51,51,51,0.55)',
+    color: a ? '#000' : 'rgba(255,255,255,0.45)',
+    border: a ? 'none' : '1px solid rgba(255,102,102,0.15)',
   })
 
   return (
@@ -124,12 +124,14 @@ function FoodSearch({ onAdd }) {
       <p className="section-title">Add Food</p>
 
       <div className="relative">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/28" />
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'rgba(255,102,102,0.45)' }} />
         <input type="text" placeholder="Search foods..." value={query}
-          onChange={e => setQuery(e.target.value)} className="input-field pl-9" />
+          onChange={e => setQuery(e.target.value)}
+          className="input-field pl-9"
+          style={{ fontSize: '16px' }} />
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1" style={{ WebkitOverflowScrolling: 'touch' }}>
         <button onClick={() => setCategory('all')} style={pillS(category === 'all')}>All</button>
         {FOOD_CATEGORIES.map(cat => (
           <button key={cat.id} onClick={() => setCategory(cat.id)} style={pillS(category === cat.id)}>
@@ -143,8 +145,8 @@ function FoodSearch({ onAdd }) {
           <div key={food.id} className="flex items-center gap-2 rounded-xl p-3" style={INNER}>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-white/82 truncate">{food.name}</p>
-              <div className="flex gap-2 text-xs text-white/30 mt-0.5">
-                <span className="text-white/55 font-semibold">{food.protein * getServings(food.id)}g P</span>
+              <div className="flex gap-2 text-xs text-white/30 mt-0.5 flex-wrap">
+                <span className="font-semibold" style={{ color: '#ff6666' }}>{food.protein * getServings(food.id)}g P</span>
                 <span>{food.calories * getServings(food.id)} kcal</span>
                 <span className="truncate">{food.serving}</span>
               </div>
@@ -152,24 +154,24 @@ function FoodSearch({ onAdd }) {
             <div className="flex items-center gap-1 shrink-0">
               <button
                 onClick={() => setServings(s => ({ ...s, [food.id]: Math.max(0.5, (s[food.id] || 1) - 0.5) }))}
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-white/45"
-                style={{ background: 'rgba(255,255,255,0.06)' }}
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{ background: 'rgba(51,51,51,0.55)', border: '1px solid rgba(255,102,102,0.15)', color: 'rgba(255,255,255,0.55)' }}
               >
                 <Minus size={12} />
               </button>
               <span className="text-xs font-bold text-white/75 w-6 text-center">{getServings(food.id)}</span>
               <button
                 onClick={() => setServings(s => ({ ...s, [food.id]: (s[food.id] || 1) + 0.5 }))}
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-white/45"
-                style={{ background: 'rgba(255,255,255,0.06)' }}
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{ background: 'rgba(51,51,51,0.55)', border: '1px solid rgba(255,102,102,0.15)', color: 'rgba(255,255,255,0.55)' }}
               >
                 <Plus size={12} />
               </button>
             </div>
             <button
               onClick={() => handleAdd(food)}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-white/65"
-              style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.15)' }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: 'rgba(255,102,102,0.18)', border: '1px solid rgba(255,102,102,0.40)', color: '#ff6666' }}
             >
               <Plus size={18} />
             </button>
@@ -196,20 +198,20 @@ function MealLog({ meals, onRemove }) {
       {meals.map(meal => (
         <div key={meal.id} className="flex items-center gap-2 rounded-xl p-3" style={INNER}>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <p className="text-sm font-semibold text-white/82 truncate">{meal.name}</p>
               {meal.servings !== 1 && (
                 <span className="text-xs text-white/30 shrink-0">×{meal.servings}</span>
               )}
             </div>
             <div className="flex gap-2 text-xs mt-0.5">
-              <span className="text-white/60 font-bold">{Math.round(meal.protein)}g P</span>
+              <span className="font-bold" style={{ color: '#ff6666' }}>{Math.round(meal.protein)}g P</span>
               <span className="text-white/30">{Math.round(meal.calories)} kcal</span>
               {meal.time && <span className="text-white/28">{meal.time}</span>}
             </div>
           </div>
           <button onClick={() => onRemove(meal.id)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-white/25 active:text-white/60">
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-white/25 active:text-white/60 shrink-0">
             <Trash2 size={14} />
           </button>
         </div>
@@ -224,12 +226,12 @@ function WaterTracker({ water, onUpdate }) {
 
   return (
     <div className="glass p-4">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <Droplets size={18} className="text-white/45" />
+      <div className="flex items-center justify-between mb-3 gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <Droplets size={18} style={{ color: '#ff6666', flexShrink: 0 }} />
           <p className="text-sm font-bold text-white/82">Water Intake</p>
         </div>
-        <span className="text-sm font-black text-white/70">{water}ml / {TARGET_ML}ml</span>
+        <span className="text-sm font-black shrink-0" style={{ color: '#ff6666' }}>{water}ml / {TARGET_ML}ml</span>
       </div>
 
       <ProgressBar value={water} max={TARGET_ML} height={10} className="mb-3" />
@@ -237,14 +239,14 @@ function WaterTracker({ water, onUpdate }) {
       <div className="flex flex-wrap gap-2">
         {[250, 500, 750].map(ml => (
           <button key={ml} onClick={() => onUpdate(Math.min(TARGET_ML, water + ml))}
-            className="flex-1 min-w-0 py-2 rounded-xl text-xs font-semibold min-h-[44px] text-white/55"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.09)' }}>
+            className="flex-1 min-w-0 py-2 rounded-xl text-xs font-semibold min-h-[44px]"
+            style={{ background: 'rgba(51,51,51,0.55)', border: '1px solid rgba(255,102,102,0.18)', color: 'rgba(255,255,255,0.65)' }}>
             +{ml}ml
           </button>
         ))}
         <button onClick={() => onUpdate(0)}
-          className="px-3 py-2 rounded-xl text-xs font-semibold min-h-[44px] text-white/38"
-          style={{ background: 'rgba(255,255,255,0.04)' }}>
+          className="px-3 py-2 rounded-xl text-xs font-semibold min-h-[44px]"
+          style={{ background: 'rgba(51,51,51,0.35)', color: 'rgba(255,255,255,0.38)' }}>
           Reset
         </button>
       </div>
@@ -254,8 +256,9 @@ function WaterTracker({ water, onUpdate }) {
           <button key={ml} onClick={() => onUpdate(ml)}
             className="flex-1 min-w-0 py-1.5 rounded-lg text-xs font-medium transition-colors"
             style={{
-              background: water === ml ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)',
-              color: water === ml ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.30)',
+              background: water === ml ? 'rgba(255,102,102,0.18)' : 'rgba(51,51,51,0.35)',
+              color: water === ml ? '#ff6666' : 'rgba(255,255,255,0.30)',
+              border: water === ml ? '1px solid rgba(255,102,102,0.35)' : '1px solid transparent',
             }}>
             {ml / 1000}L
           </button>
@@ -263,7 +266,7 @@ function WaterTracker({ water, onUpdate }) {
       </div>
 
       {water >= TARGET_ML && (
-        <p className="text-xs text-white/70 text-center mt-2 font-semibold">Daily water target hit!</p>
+        <p className="text-xs text-center mt-2 font-semibold" style={{ color: '#ff6666' }}>Daily water target hit! 💧</p>
       )}
     </div>
   )
@@ -274,21 +277,21 @@ function SupplementCard({ supp, checked, onToggle }) {
     <button onClick={onToggle}
       className="flex items-start gap-3 p-3 rounded-xl border transition-all min-h-[44px] text-left w-full"
       style={checked
-        ? { background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.22)' }
-        : { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }
+        ? { background: 'rgba(255,102,102,0.12)', border: '1px solid rgba(255,102,102,0.40)' }
+        : { background: 'rgba(51,51,51,0.35)', border: '1px solid rgba(255,102,102,0.10)' }
       }>
       <div className="w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 shrink-0 transition-all"
         style={checked
-          ? { borderColor: 'rgba(255,255,255,0.55)', background: 'rgba(255,255,255,0.12)' }
-          : { borderColor: 'rgba(255,255,255,0.15)', background: 'transparent' }
+          ? { borderColor: '#ff6666', background: 'rgba(255,102,102,0.18)' }
+          : { borderColor: 'rgba(255,102,102,0.25)', background: 'transparent' }
         }>
-        {checked && <CheckCircle size={14} className="text-white/80" />}
+        {checked && <CheckCircle size={14} style={{ color: '#ff6666' }} />}
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <p className="text-sm font-semibold text-white/82">{supp.name}</p>
-          <span className="text-xs font-bold px-1.5 py-0.5 rounded text-white/55"
-            style={{ background: 'rgba(255,255,255,0.07)' }}>
+          <span className="text-xs font-bold px-1.5 py-0.5 rounded shrink-0"
+            style={{ background: 'rgba(51,51,51,0.65)', color: 'rgba(255,102,102,0.70)' }}>
             {supp.dose}
           </span>
         </div>
@@ -335,28 +338,28 @@ function UserTargetCard({ user, onUpdate }) {
       <div className="flex items-center justify-between mb-2">
         <p className="section-title">Your Targets</p>
         {!editing && (
-          <button onClick={() => setEditing(true)} className="text-xs text-white/45 font-semibold">Edit weight</button>
+          <button onClick={() => setEditing(true)} className="text-xs font-semibold" style={{ color: 'rgba(255,102,102,0.65)' }}>Edit weight</button>
         )}
       </div>
       {editing ? (
         <div className="flex gap-2">
           <input type="number" value={weight} onChange={e => setWeight(e.target.value)}
-            className="input-field flex-1" placeholder="75" />
-          <button onClick={save} className="btn-primary px-4 text-sm">Save</button>
+            className="input-field flex-1" placeholder="75" style={{ fontSize: '16px' }} />
+          <button onClick={save} className="btn-primary px-4 text-sm shrink-0">Save</button>
         </div>
       ) : (
-        <div className="flex gap-3">
-          <div className="flex-1 rounded-xl p-3 text-center" style={INNER}>
-            <p className="text-xl font-black text-white">{user.weight}kg</p>
-            <p className="text-xs text-white/30">Body Weight</p>
+        <div className="grid grid-cols-3 gap-2">
+          <div className="rounded-xl p-3 text-center" style={INNER}>
+            <p className="text-xl font-black text-white">{user.weight}<span className="text-xs text-white/40">kg</span></p>
+            <p className="text-xs text-white/30 mt-0.5">Weight</p>
           </div>
-          <div className="flex-1 rounded-xl p-3 text-center" style={INNER}>
-            <p className="text-xl font-black text-white">{user.targetProtein}g</p>
-            <p className="text-xs text-white/30">Protein Target</p>
+          <div className="rounded-xl p-3 text-center" style={INNER}>
+            <p className="text-xl font-black" style={{ color: '#ff6666' }}>{user.targetProtein}<span className="text-xs" style={{ color: 'rgba(255,102,102,0.50)' }}>g</span></p>
+            <p className="text-xs text-white/30 mt-0.5">Protein</p>
           </div>
-          <div className="flex-1 rounded-xl p-3 text-center" style={INNER}>
-            <p className="text-xl font-black text-white">{user.targetCalories}</p>
-            <p className="text-xs text-white/30">Cal Target</p>
+          <div className="rounded-xl p-3 text-center" style={INNER}>
+            <p className="text-lg font-black text-white">{user.targetCalories}</p>
+            <p className="text-xs text-white/30 mt-0.5">Calories</p>
           </div>
         </div>
       )}

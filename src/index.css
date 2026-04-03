@@ -143,6 +143,7 @@
     color: #ffffff;
     width: 100%;
     min-height: 44px;
+    font-size: 16px; /* prevents iOS auto-zoom on focus */
     transition: border-color 0.15s;
     outline: none;
   }
